@@ -10,7 +10,10 @@ import UIKit
 open class CodeInputWrapper: UIView {
     open private(set) var textView: CodeInputView!
 
-    override public init(frame: CGRect) {
+    private init() {
+        fatalError("This class designed to be used only in xib/storyboard, please use CodeInputView")
+    }
+    private override init(frame: CGRect) {
         fatalError("This class designed to be used only in xib/storyboard, please use CodeInputView")
     }
 
