@@ -44,8 +44,8 @@ open class CodeInputView: UITextView {
 
     lazy var underlineLayer: CAShapeLayer = {
         let shape = CAShapeLayer()
-        shape.strokeColor = UIColor.red.cgColor
-        shape.fillColor = UIColor.red.cgColor
+        shape.strokeColor = UIColor.black.cgColor
+        shape.fillColor = UIColor.black.cgColor
         shape.backgroundColor = UIColor.clear.cgColor
         self.layer.insertSublayer(shape, at: 0)
         shape.frame = self.layer.bounds
@@ -64,8 +64,8 @@ open class CodeInputView: UITextView {
     func setup() {
         isScrollEnabled = false
         textAlignment = .center
-        backgroundColor = .yellow
         contentInset = .zero
+        backgroundColor = .clear
         textContainerInset = .zero
         textContainer.maximumNumberOfLines = symbolsCount
         textContainer.lineFragmentPadding = 0
@@ -79,7 +79,7 @@ open class CodeInputView: UITextView {
 
     func updateUnderlines() {
         let underlineRects = calculateRects(for: .text)
-            .map { CGRect(x: $0.minX, y: $0.maxY - 10, width: $0.width, height: 3) }
+            .map { CGRect(x: $0.minX, y: $0.maxY - 1, width: $0.width, height: 1) }
         let path = CGMutablePath()
         path.addRects(underlineRects)
         underlineLayer.path = path

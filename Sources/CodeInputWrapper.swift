@@ -19,6 +19,7 @@ open class CodeInputWrapper: UIView {
 
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        backgroundColor = .clear
         textView = createCodeInputView()
         addSubview(textView)
     }
