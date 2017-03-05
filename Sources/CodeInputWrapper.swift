@@ -9,6 +9,8 @@ import UIKit
 
 open class CodeInputWrapper: UIView {
     open private(set) var textView: CodeInputView!
+    @IBInspectable var symbolsCount: Int = 4
+    @IBInspectable var symbolSpacing: CGFloat = 8
 
     private init() {
         fatalError("This class designed to be used only in xib/storyboard, please use CodeInputView")
@@ -19,13 +21,17 @@ open class CodeInputWrapper: UIView {
 
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+    }
+
+    open override func awakeFromNib() {
+        super.awakeFromNib()
         backgroundColor = .clear
         textView = createCodeInputView()
         addSubview(textView)
     }
 
     open func createCodeInputView() -> CodeInputView {
-        return CodeInputView(4, spacing: 20)
+        return CodeInputView(symbolsCount, spacing: symbolSpacing)
     }
 
     override open var intrinsicContentSize: CGSize {

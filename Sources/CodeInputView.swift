@@ -54,12 +54,24 @@ open class CodeInputView: UITextView {
 
     override open func layoutSubviews() {
         super.layoutSubviews()
+        update()
+    }
+
+    func update() {
         updateExclusion()
         updateUnderlines()
     }
 
-    public var symbolsCount: Int
-    public var symbolSpacing: CGFloat
+    public var symbolsCount: Int {
+        didSet {
+            update()
+        }
+    }
+    public var symbolSpacing: CGFloat {
+        didSet {
+            update()
+        }
+    }
 
     func setup() {
         isScrollEnabled = false
