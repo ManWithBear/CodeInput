@@ -8,8 +8,13 @@
 import UIKit
 
 class CodeInputTextContainer: NSTextContainer {
+    // swiftlint:disable:next line_length
     override func lineFragmentRect(forProposedRect proposedRect: CGRect, at characterIndex: Int, writingDirection baseWritingDirection: NSWritingDirection, remaining remainingRect: UnsafeMutablePointer<CGRect>?) -> CGRect {
-        let sRect = super.lineFragmentRect(forProposedRect: proposedRect, at: characterIndex, writingDirection: baseWritingDirection, remaining: remainingRect)
+        let sRect = super.lineFragmentRect(forProposedRect: proposedRect,
+                                           at: characterIndex,
+                                           writingDirection: baseWritingDirection,
+                                           remaining: remainingRect
+        )
         guard let storage = layoutManager?.textStorage, !storage.string.isEmpty else { return sRect }
         let char = storage.attributedSubstring(from: NSRange(location: characterIndex, length: 1))
         let width = char.size().width

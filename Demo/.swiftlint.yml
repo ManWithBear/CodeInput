@@ -1,0 +1,8 @@
+included:
+  - ../Sources
+  - CodeInputDemo
+opt_in_rules:
+  - closure_spacing  # closure should have single space inside each brace
+  - empty_count      # prefer isEmpty over comparing to 0
+  - number_separator # underscore should be used as thousand separator in large decimal numbers
+line_length: 120
