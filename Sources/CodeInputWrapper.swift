@@ -12,10 +12,10 @@ open class CodeInputWrapper: UIView {
     @IBInspectable var symbolsCount: Int = 4
     @IBInspectable var symbolSpacing: CGFloat = 8
 
-    private init() {
+    @available(*, unavailable) init() {
         fatalError("This class designed to be used only in xib/storyboard, please use CodeInputView")
     }
-    private override init(frame: CGRect) {
+    @available(*, unavailable) override init(frame: CGRect) {
         fatalError("This class designed to be used only in xib/storyboard, please use CodeInputView")
     }
 

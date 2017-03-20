@@ -38,7 +38,7 @@ open class CodeInputView: UITextView {
         setup()
     }
 
-    required public init?(coder aDecoder: NSCoder) {
+    @available(*, unavailable) required public init?(coder aDecoder: NSCoder) {
         fatalError("Xib/storyboard initialiation not supported, please use CodeInputWrapper")
     }
 
