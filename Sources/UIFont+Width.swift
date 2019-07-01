@@ -9,6 +9,6 @@ import UIKit.UIFont
 
 extension UIFont {
     var mWidth: CGFloat {
-        return ("M" as NSString).size(withAttributes: [.font: self]).width
+        return ceil(("M" as NSString).size(withAttributes: [.font: self]).width)
     }
 }

@@ -15,13 +15,13 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let input = CodeInputView(8, spacing: 6)
-        input.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(input)
         self.input = input
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        input?.sizeToFit()
         input?.center = view.center
     }
 

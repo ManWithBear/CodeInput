@@ -26,6 +26,9 @@ class CodeInputTextContainer: NSTextContainer {
 }
 
 open class CodeInputView: UITextView {
+    private var lettersFrames: [CGRect] = []
+    private var exclusionsFrames: [CGRect] = []
+
     public init(_ symbolsCount: Int, spacing: CGFloat) {
         self.symbolsCount = symbolsCount
         self.symbolSpacing = spacing
@@ -58,6 +61,7 @@ open class CodeInputView: UITextView {
     }
 
     func update() {
+        calculateRects()
         updateExclusion()
         updateUnderlines()
     }
@@ -83,39 +87,38 @@ open class CodeInputView: UITextView {
         textContainer.lineFragmentPadding = 0
         font = UIFont.systemFont(ofSize: 30)
         text = ""
+        update()
+    }
+
+    func calculateRects() {
+        guard let font = font else { return }
+        let height = bounds.height
+        lettersFrames = stride(from: 0, to: symbolsCount, by: 1).map {
+            CGRect(x: (font.mWidth + symbolSpacing) * CGFloat($0), y: 0, width: font.mWidth, height: height)
+        }
+        exclusionsFrames = stride(from: 1, to: symbolsCount, by: 1).map {
+            CGRect(x: (font.mWidth + symbolSpacing) * CGFloat($0) - symbolSpacing, y: 0, width: symbolSpacing, height: height)
+        }
     }
 
     func updateExclusion() {
-        textContainer.exclusionPaths = calculateRects(for: .spacing).map { UIBezierPath(rect: $0) }
+        textContainer.exclusionPaths = exclusionsFrames.map { UIBezierPath(rect: $0) }
     }
 
     func updateUnderlines() {
-        let underlineRects = calculateRects(for: .text)
+        let underlineRects = lettersFrames
             .map { CGRect(x: $0.minX, y: $0.maxY - 1, width: $0.width, height: 1) }
         let path = CGMutablePath()
         path.addRects(underlineRects)
         underlineLayer.path = path
     }
 
-    enum Glyph {
-        case spacing
-        case text
-    }
-
-    func calculateRects(for glyph: Glyph) -> [CGRect] {
-        let from = (glyph == .text) ? 0 : 1
-        let count = 2 * symbolsCount - 1
-        let height = bounds.height
-        let width = bounds.width / CGFloat(count)
-        return stride(from: from, to: count, by: 2)
-            .map { CGRect(x: CGFloat($0) * width, y: 0, width: width, height: height) }
-    }
-
     override open var intrinsicContentSize: CGSize {
-        guard let font = font else { return .zero }
-        let height = font.ascender + (-1 * font.descender)
-        let spacing = CGFloat(symbolsCount - 1) * symbolSpacing
-        let lettersWidth = font.mWidth * CGFloat(symbolsCount)
-        return CGSize(width: lettersWidth + spacing, height: height)
+        let height = font.map { $0.ascender - $0.descender } ?? 0
+        return CGSize(width: lettersFrames.last?.maxX ?? 0, height: height)
+    }
+
+    open override func sizeToFit() {
+        bounds.size = intrinsicContentSize
     }
 }
