@@ -8,7 +8,7 @@
 import UIKit.UIFont
 
 extension UIFont {
-    var maxWidth: CGFloat {
-        return ("W" as NSString).size(attributes: [NSFontAttributeName: self]).width
+    var mWidth: CGFloat {
+        return ("M" as NSString).size(withAttributes: [.font: self]).width
     }
 }

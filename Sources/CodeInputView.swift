@@ -115,7 +115,7 @@ open class CodeInputView: UITextView {
         guard let font = font else { return .zero }
         let height = font.ascender + (-1 * font.descender)
         let spacing = CGFloat(symbolsCount - 1) * symbolSpacing
-        let lettersWidth = font.maxWidth * CGFloat(symbolsCount)
+        let lettersWidth = font.mWidth * CGFloat(symbolsCount)
         return CGSize(width: lettersWidth + spacing, height: height)
     }
 }
