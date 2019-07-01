@@ -7,6 +7,37 @@
 
 import UIKit
 
+/// Thanks to https://gist.github.com/preble/ab98fabda985b054126e
+class CodeInputTextStorage: NSTextStorage {
+
+    private var storage = NSTextStorage()
+
+    // MARK: NSTextStorage Primitive Methods
+    // https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/TextStorageLayer/Tasks/Subclassing.html
+
+    override var string: String {
+        return storage.string
+    }
+
+    override func attributes(at location: Int, effectiveRange range: NSRangePointer?) -> [NSAttributedString.Key : Any] {
+        return storage.attributes(at: location, effectiveRange: range)
+    }
+
+    override func replaceCharacters(in range: NSRange, with str: String) {
+        beginEditing()
+        storage.replaceCharacters(in: range, with: str)
+        edited(.editedCharacters, range: range, changeInLength: (str as NSString).length - range.length)
+        endEditing()
+    }
+
+    override func setAttributes(_ attrs: [NSAttributedString.Key : Any]?, range: NSRange) {
+        beginEditing()
+        storage.setAttributes(attrs, range: range)
+        edited(.editedAttributes, range: range, changeInLength: 0)
+        endEditing()
+    }
+}
+
 class CodeInputTextContainer: NSTextContainer {
     // swiftlint:disable:next line_length
     override func lineFragmentRect(forProposedRect proposedRect: CGRect, at characterIndex: Int, writingDirection baseWritingDirection: NSWritingDirection, remaining remainingRect: UnsafeMutablePointer<CGRect>?) -> CGRect {
@@ -32,7 +63,7 @@ open class CodeInputView: UITextView {
     public init(_ symbolsCount: Int, spacing: CGFloat) {
         self.symbolsCount = symbolsCount
         self.symbolSpacing = spacing
-        let textStorage = NSTextStorage(string: "")
+        let textStorage = CodeInputTextStorage()
         let layout = NSLayoutManager()
         let container = CodeInputTextContainer(size: .zero)
         layout.addTextContainer(container)
@@ -87,6 +118,9 @@ open class CodeInputView: UITextView {
         textContainer.lineFragmentPadding = 0
         font = UIFont.systemFont(ofSize: 30)
         text = ""
+        autocapitalizationType = .none
+        autocorrectionType = .no
+        spellCheckingType = .no
         update()
     }
 
