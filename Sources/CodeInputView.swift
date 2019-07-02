@@ -126,12 +126,32 @@ open class CodeInputView: UITextView {
     open override func sizeToFit() {
         bounds.size = intrinsicContentSize
     }
+
+    open override func caretRect(for position: UITextPosition) -> CGRect {
+        var res = super.caretRect(for: position)
+        if text.count == 0 { return res }
+        guard let letterContainerIndex = lettersFrames.firstIndex(where: { $0.intersects(res) }) else { return res }
+        if letterContainerIndex + 1 == symbolsCount { return .zero }
+        if letterContainerIndex + 1 < text.count { return res }
+        let frame = lettersFrames[letterContainerIndex + 1]
+        res.origin.x = frame.midX - res.width / 2
+        return res
+    }
 }
 extension CodeInputView: UITextViewDelegate {
     public func textViewDidChange(_ textView: UITextView) {
-        text = text.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        if text.count > symbolsCount {
-            text = String(text.prefix(symbolsCount))
+        var trimmed = text.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        if trimmed.count > symbolsCount {
+            trimmed = String(trimmed.prefix(symbolsCount))
+        }
+        if trimmed != text {
+            let selection = selectedRange
+            text = trimmed
+            // FIXME: Caret position do not update correctly when you paste text in
+//            let fRange = NSRange(
+//                location: min(selection.location, text.count),
+//                length:
+//            )
         }
     }
 }
